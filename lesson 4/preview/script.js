@@ -48,16 +48,30 @@
 // arr = ans.split(',');
 // console.log(arr);
 
-// let arr = ['aewe', 'zzz', 'pp', 'rqa'],
-//     i = arr.join(', ');
+let arr = ['aewe', 'zzz', 'pp', 'rqa'],
+    i = arr.join(', ');
 
-//     console.log(i);
+    console.log(i);
 
-let arr = [1, 15, 4],
-    i = arr.sort(compareNum);
+// let arr = [1, 15, 4],
+//     i = arr.sort(compareNum);
 
 function compareNum(a,b) {
     return a-b;
 }
 
 console.log(arr);
+
+let soldier = {
+    health: 400,
+    armor: 100
+};
+
+let john = {
+    health: 100
+}
+
+john.__proto__ = soldier;
+
+console.log(john);
+console.log(john.armor);
