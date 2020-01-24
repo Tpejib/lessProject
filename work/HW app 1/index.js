@@ -16,71 +16,75 @@ let appData = {
         expenses: {},
         optionalExpenses: {},
         income: [],
-        savings: true
+        savings: true,
+        chooseExpenses: function() {
+            for (let i = 0; i < 2;  i++) {
+                let a = prompt('Введите обязательную статью расходов в этом месяце'),
+                    b = +prompt('Во сколько обойдется?');
+                
+                if ( typeof(a) === 'string' && typeof(a) != null && typeof(b) != null 
+                    && a != '' && b != ''  && a.length < 50) {
+                    console.log('done');
+                    appData.expenses[a] = b;
+                } else {
+                    alert('Введите статью расходов!');
+                    i--;
+                }
+            }
+        },
+        detectDayBudget: function() {
+            appData.moneyPerDay = +(appData.budget / 30).toFixed();
+            alert('Ежедневный бюджет: ' + appData.moneyPerDay);
+        },
+        detectLevel: function() {
+            if (appData.moneyPerDay < 100) {
+                console.log('Минимальный уровень достатка');
+            } else if (appData.moneyPerDay > 100 && appData.moneyPerDay < 2000) {
+                console.log('Средний уровень достатка');
+            } else if (appData.moneyPerDay > 2000) {
+                console.log('Высокий уровень достатка');
+            } else {
+                console.log('Error');
+            }
+        },
+        checkSavings: function() {
+            if (appData.savings == true) {
+                let save = +prompt('Какова сумма накоплений?'),
+                    percent = +prompt('Под каким процентом?');
+        
+                    appData.monthIncome = +(save/100/12*percent).toFixed(2);
+                    alert('Доход в месяц с вашего депозита: ' + appData.monthIncome);
+            }
+        },
+        chooseOptExpenses: function() {
+            for (let i = 0; i < 3; i++) {
+                let a = prompt('Статья необязательных расходов?'),
+                    b = +prompt('Во сколько это обойдется?');
+                    if ((a && b) != null && (a && b) != '') {
+                        appData.optionalExpenses[a] = b;
+                    } else {
+                        break;
+                    }
+            }
+        },
+        chooseIncome: function() {
+            let items = prompt('Что принесет дополнительный доход? (Перечислите через запятую)', '');
+            if (typeof(items) === 'string' && items != null && items != '') {
+                appData.income = items.split(', ');
+                appData.income.push(prompt('Может что-то еще?'));
+                appData.income.sort();
+                appData.income.forEach(function(itemarr, i) {
+                    alert('Способы доп. зароботка: ' + (i + 1) + ' - ' + itemarr);
+                });
+                console.log(appData.income);
+            } else {
+                console.log('Ошибка!');
+            }
+        }
     };
 
-function chooseExpenses() {
-    for (let i = 0; i < 2;  i++) {
-        let a = prompt('Введите обязательную статью расходов в этом месяце'),
-            b = +prompt('Во сколько обойдется?');
-        
-        if ( typeof(a) === 'string' && typeof(a) != null && typeof(b) != null 
-            && a != '' && b != ''  && a.length < 50) {
-            console.log('done');
-            appData.expenses[a] = b;
-        } else {
-            alert('Введите статью расходов!');
-            i--;
-        }
-    }
+for (let key in appData) {
+    console.log('Наша программа включает в себя данные: ' + key + ' - ' + appData[key]);
 }
-chooseExpenses();
-
-function chooseOptExpenses() {
-    for (let i = 0; i < 3; i++) {
-        let a = prompt('Статья необязательных расходов?'),
-            b = +prompt('Во сколько это обойдется?');
-            if ((a && b) != null && (a && b) != '') {
-                appData.optionalExpenses[a] = b;
-            } else {
-                break;
-            }
-    }
-}
-chooseOptExpenses();
-
-function detectDayBudget() {
-    appData.moneyPerDay = +(appData.budget / 30).toFixed();
-
-    alert('Ежедневный бюджет: ' + appData.moneyPerDay);
-}
-detectDayBudget();
-
-function detectLevel() {
-    if (appData.moneyPerDay < 100) {
-        console.log('Минимальный уровень достатка');
-    } else if (appData.moneyPerDay > 100 && appData.moneyPerDay < 2000) {
-        console.log('Средний уровень достатка');
-    } else if (appData.moneyPerDay > 2000) {
-        console.log('Высокий уровень достатка');
-    } else {
-        console.log('Error');
-    }
-}
-detectLevel();
-
-function checkSavings() {
-    if (appData.savings == true) {
-        let save = +prompt('Какова сумма накоплений?'),
-            percent = +prompt('Под каким процентом?');
-
-            appData.monthIncome = +(save/100/12*percent).toFixed(2);
-            alert('Доход в месяц с вашего депозита: ' + appData.monthIncome);
-    }
-}
-
-checkSavings();
-
-
 
 console.log(appData);
