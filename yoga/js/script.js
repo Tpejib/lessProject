@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Timer
 
-    let deadline = '2020-02-07';
+    let deadline = '2020-02-10';
 
     function getTimeRemaining(endtime) {
         let t = Date.parse(endtime) - Date.parse(new Date()),
@@ -116,70 +116,44 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault();
         form.appendChild(statusMessage);
 
-        let request = new XMLHttpRequest();
-        request.open('POST', 'server.php');
-        request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        function sendData() {
+            return new Promise(function (resolve, reject) {
+                let request = new XMLHttpRequest();
+                request.open('POST', 'server.php');
+                request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
 
-        let formData = new FormData(form);
+                let formData = new FormData(form);
 
-        let obj = {};
-        formData.forEach(function(value, key) {
-            obj[key] = value;
-        });
-        let json = JSON.stringify(obj);
+                let obj = {};
+                formData.forEach(function(value, key) {
+                    obj[key] = value;
+                });
 
-        request.send(json);
+                let json = JSON.stringify(obj);
 
-        request.addEventListener('readystatechange', function() {
-            if (request.readyState < 4) {
-                statusMessage.innerHTML = message.loading;
-            } else if (request.readyState === 4 && request.status == 200) {
-                statusMessage.innerHTML = message.success;
-            } else {
-                statusMessage.innerHTML = message.failure;
-            }
-        });
+                request.send(json);
+
+                request.onload = function() {
+                    if (request.readyState < 4) {
+                        statusMessage.innerHTML = message.loading;
+                    } else if (request.readyState === 4 && request.status == 200) {
+                        resolve(this.response);
+                    } else {
+                        reject();
+                    }
+                };
+            });
+        }
+
+        sendData()
+                .then(response => {
+                    statusMessage.innerHTML = message.success;
+                })
+                .catch( () => statusMessage.innerHTML = message.failure);
+
 
         for (let i = 0; i < input.length; i++) {
             input[i].value = '';
-        }
-    });
-
-    let contactForm = document.getElementById('form'),
-        contactInput = contactForm.querySelectorAll('input');
-    
-    contactForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-        contactForm.appendChild(statusMessage);
-
-        let request = new XMLHttpRequest();
-        request.open('POST', 'server.php');
-        request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-
-        let formData = new FormData(contactForm);
-
-        console.log(formData);
-
-        let obj = {};
-        formData.forEach(function(value, key) {
-            obj[key] = value;
-        });
-        let json = JSON.stringify(obj);
-
-        request.send(json);
-
-        request.addEventListener('readystatechange', function() {
-            if (request.readyState < 4) {
-                statusMessage.innerHTML = message.loading;
-            } else if (request.readyState === 4 && request.status == 200) {
-                statusMessage.innerHTML = message.success;
-            } else {
-                statusMessage.innerHTML = message.failure;
-            }
-        });
-
-        for (let i = 0; i < contactInput.length; i++) {
-            contactInput[i].value = '';
         }
     });
 
