@@ -17,7 +17,7 @@
 
     function my_acf_google_map_api( $api ){
 	
-        $api['key'] = 'AIzaSyCNK7XhyCp_0yaltlxLuScKdAOHag0Lf24'; // Ваш ключ Google API
+        $api['key'] = ''; // Ваш ключ Google API
         
         return $api;
         
